@@ -31,7 +31,7 @@ except ImportError:
         return None
 # -----------------------------------
 
-def monitor_sistema():
+def monitor_sistema(metrics_file_path):
     """Monitoriza recursos del sistema en tiempo real"""
     while True:
         try:
@@ -42,7 +42,7 @@ def monitor_sistema():
             
             metricas = {'timestamp': datetime.now().isoformat(), 'cpu': cpu, 'ram': ram, 'disco': disco, 'gpu_temp': gpu_temp}
             
-            with open('C:\\ATENEA\\logs\\metricas.json', 'a') as f:
+            with open(metrics_file_path, 'a') as f:
                 f.write(json.dumps(metricas) + '\n')
                 
             time.sleep(60)
@@ -67,6 +67,8 @@ def iniciar_interfaz_grafica():
                 super().__init__()
                 self.title("🤖 ATENEA - Consola de Control y Análisis")
                 self.geometry("1600x900")
+
+                self.config = self.cargar_configuracion()
 
                 self.grid_columnconfigure(1, weight=1)
                 self.grid_rowconfigure(1, weight=1)
@@ -166,6 +168,14 @@ def iniciar_interfaz_grafica():
                 self.log_text.see("end")
                 registrar_evento("LOG_UI", "GUI", mensaje)
 
+            def cargar_configuracion(self):
+                try:
+                    with open("c:\\ATENEA\\atenea_core\\config.json", 'r') as f:
+                        return json.load(f)
+                except Exception as e:
+                    self.log(f"Error crítico: No se pudo cargar config.json. {e}")
+                    return None
+
             def actualizar_metricas(self):
                 # ... (lógica de métricas sin cambios) ...
                 self.after(1000, self.actualizar_metricas)
@@ -203,7 +213,7 @@ def iniciar_interfaz_grafica():
                     return
                 
                 self.log("--- INICIANDO ASIMILADOR 1: ANÁLISIS FORENSE ---")
-                output_dir = os.path.join("C:\\ATENEA", "atenea_lab", "lab_io", "asimilador_1_output")
+                output_dir = self.config['asimiladores']['asimilador_1']['output_dir']
                 os.makedirs(output_dir, exist_ok=True)
 
                 threading.Thread(target=self._run_asim_1_thread, args=(output_dir,), daemon=True).start()
@@ -221,7 +231,7 @@ def iniciar_interfaz_grafica():
                     return
 
                 self.log("--- INICIANDO ASIMILADOR 2: EMULACIÓN COGNITIVA ---")
-                output_dir = os.path.join("C:\\ATENEA", "atenea_lab", "lab_io", "asimilador_2_output")
+                output_dir = self.config['asimiladores']['asimilador_2']['output_dir']
                 os.makedirs(output_dir, exist_ok=True)
                 
                 threading.Thread(target=self._run_asim_2_thread, args=(output_dir,), daemon=True).start()
@@ -235,12 +245,12 @@ def iniciar_interfaz_grafica():
                     self.log(f"❌ Error en Asimilador 2: {e}")
 
             def exportar_informe(self):
-                db_path = "C:\\ATENEA\\atenea_core\\database\\atenea_mind.db"
+                db_path = self.config['database']['path']
                 self.log(f"ℹ️ Función 'Exportar Informe' llamada. Apuntando a la base de datos: {db_path}")
                 # Aquí iría la lógica para generar y exportar un informe desde la DB.
 
             def cargar_sesion(self):
-                db_path = "C:\\ATENEA\\atenea_core\\database\\atenea_mind.db"
+                db_path = self.config['database']['path']
                 self.log(f"ℹ️ Función 'Cargar Sesión' llamada. Obteniendo datos desde: {db_path}")
                 # Aquí iría la lógica para cargar una sesión de análisis desde la DB.
 
@@ -282,6 +292,8 @@ def main():
         # 1. Cargar configuración desde .env
         print("📋 Cargando configuración...")
         load_dotenv()
+        with open("c:\\ATENEA\\atenea_core\\config.json", 'r') as f:
+            config = json.load(f)
         
         # 2. Inicializar base de datos
         print("🗄️ Inicializando base de datos...")
@@ -298,7 +310,7 @@ def main():
         
         # 5. Iniciar monitor del sistema
         print("📊 Iniciando monitor del sistema...")
-        hilo_sistema = threading.Thread(target=monitor_sistema, name="MonitorSistema", daemon=True)
+        hilo_sistema = threading.Thread(target=monitor_sistema, args=(config['logging']['metrics_file'],), name="MonitorSistema", daemon=True)
         hilo_sistema.start()
         
         # 6. Iniciar bot de Telegram
@@ -322,4 +334,4 @@ def main():
         registrar_evento("ERROR_CRITICO", "sistema", str(e))
 
 if __name__ == "__main__":
-    main()
+    m
