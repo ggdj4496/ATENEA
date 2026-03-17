@@ -6,8 +6,8 @@ from atenea_core.database_manager import inicializar_database, registrar_evento
 from atenea_core.kernel_monitor import iniciar_monitoreo
 from atenea_core.atenea_core_logic import registrar_arranque
 # Importaciones de módulos que se crearán a continuación
-# from atenea_telegram.bot import iniciar_bot
-# from atenea_bridge.ui import iniciar_ui
+from atenea_telegram.bot import iniciar_bot
+from atenea_bridge.ui import iniciar_ui
 
 def iniciar_bot_telegram():
     """
