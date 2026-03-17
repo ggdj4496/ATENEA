@@ -50,9 +50,7 @@ def monitor_sistema(metrics_file_path):
         except Exception as e:
             registrar_evento("ERROR_MONITOR", "sistema", str(e))
 
-def iniciar_bot_telegram():
-    """Inicializa bot de Telegram con Telethon y manejo de sesiones"""
-    # ... (código de bot de telegram restaurado y funcional)
+
 
 def iniciar_interfaz_grafica():
     """Interfaz gráfica avanzada con CustomTkinter y arquitectura profesional."""
@@ -316,12 +314,10 @@ def main():
         
         # 6. Iniciar bot de Telegram
         print("🤖 Iniciando bot de Telegram...")
-        hilo_telegram = threading.Thread(target=iniciar_bot_telegram, name="TelegramBot", daemon=True)
-        hilo_telegram.start()
+        # El bot de Telegram se ejecutará en el hilo principal
         
         print("✅ ATENEA :: Kernel iniciado... [ONLINE]")
         print("✅ ATENEA :: Hilo Monitor... [ONLINE]")
-        print("✅ ATENEA :: Hilo Telegram... [ONLINE]")
         
         # 7. Iniciar interfaz gráfica (esto bloqueará el hilo principal)
         print("🖥️ Iniciando interfaz gráfica...")
