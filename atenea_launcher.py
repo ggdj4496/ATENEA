@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from dotenv import load_dotenv
 from tkinter import filedialog
-from PIL import Image, ImageTk
+from PIL import Image
 
 import customtkinter as ctk
 from atenea_core.database_manager import inicializar_database, registrar_evento
@@ -72,8 +72,8 @@ def iniciar_interfaz_grafica():
                 self.grid_rowconfigure(1, weight=1)
 
                 # --- Variables de estado ---
-                self.rut-img_original = ""
-                self.rut-img_resultado = ""
+                self.ruta_img_original = ""
+                self.ruta_img_resultado = ""
 
                 # --- Panel de Control (Izquierda) ---
                 self.control_panel = ctk.CTkFrame(self, width=350, corner_radius=0)
@@ -173,7 +173,7 @@ def iniciar_interfaz_grafica():
             def cargar_original(self):
                 path = filedialog.askopenfilename(title="Seleccionar Imagen Original", filetypes=[("Imágenes", "*.png;*.jpg;*.jpeg")])
                 if path:
-                    self.rut-img_original = path
+                    self.ruta_img_original = path
                     self.label_original.configure(text=os.path.basename(path), text_color="white")
                     self.log(f"Imagen Original cargada: {path}")
                     self.mostrar_imagen(path, self.image_label_original)
@@ -198,7 +198,7 @@ def iniciar_interfaz_grafica():
                     self.log(f"Error al mostrar imagen: {e}")
 
             def run_asimilador_1(self):
-                if not self.rut-img_original or not self.rut-img_resultado:
+                if not self.ruta_img_original or not self.ruta_img_resultado:
                     self.log("❌ Error: Debe seleccionar una imagen original y una resultado.")
                     return
                 
@@ -228,7 +228,7 @@ def iniciar_interfaz_grafica():
 
             def _run_asim_2_thread(self, output_dir):
                 try:
-                    reporte = emulate_and_extract(self.rut-img_original, self.rut-img_resultado, output_dir)
+                    reporte = emulate_and_extract(self.ruta_img_original, self.ruta_img_resultado, output_dir)
                     self.log("✅ Asimilador 2 completado. Reporte cognitivo generado.")
                     self.log(f"Reporte: {json.dumps(reporte, indent=2)}")
                 except Exception as e:
