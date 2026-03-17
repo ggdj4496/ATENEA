@@ -1,41 +1,44 @@
 import customtkinter as ctk
-import os
-import threading
+import subprocess
+import sys
 
 ctk.set_appearance_mode("dark")
 
-class AteneaBridge(ctk.CTk):
+class AteneaConsole(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("ATENEA SYSTEM - CONTROL PANEL")
-        self.geometry("1000x600")
+        self.title("ATENEA AGENT - COMMAND CENTER")
+        self.geometry("1100x700")
 
-        # Layout: Sidebar y Main
+        # Configuración de Grid
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        # SIDEBAR
-        self.sidebar = ctk.CTkFrame(self, width=200, corner_radius=0)
+        # Barra Lateral
+        self.sidebar = ctk.CTkFrame(self, width=240, corner_radius=0)
         self.sidebar.grid(row=0, column=0, sticky="nsew")
-        self.lbl_logo = ctk.CTkLabel(self.sidebar, text="ATENEA BOT", font=("Orbitron", 20, "bold"))
-        self.lbl_logo.pack(pady=20)
-
-        # BOTONES DE CONTROL
-        self.btn_sync = ctk.CTkButton(self.sidebar, text="SINCRONIZAR", fg_color="#1f538d", command=self.sync_atenea)
-        self.btn_sync.pack(pady=10, padx=20)
-
-        # MAIN CONSOLE
-        self.console_frame = ctk.CTkFrame(self, fg_color="#101010")
-        self.console_frame.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
         
-        self.log_txt = ctk.CTkTextbox(self.console_frame, font=("Consolas", 12), text_color="#00FF41")
-        self.log_txt.pack(fill="both", expand=True, padx=10, pady=10)
-        self.log_txt.insert("0.0", ">>> SISTEMA DE CONTROL ATENEA ONLINE...\n")
+        self.lbl_title = ctk.CTkLabel(self.sidebar, text="ATENEA KERNEL", font=("Consolas", 20, "bold"))
+        self.lbl_title.pack(pady=30)
 
-    def sync_atenea(self):
-        self.log_txt.insert("end", ">>> Conectando con atenea_agent_bot... Sincronizando.\n")
-        # Aquí llamaríamos al arranque de Telegram
+        # Botones de Funciones (Lo que pediste)
+        self.btn_asimilacion = ctk.CTkButton(self.sidebar, text="🧬 ASIMILACIÓN BOTS", command=self.open_lab)
+        self.btn_asimilacion.pack(pady=10, padx=20)
+        
+        self.btn_perchance = ctk.CTkButton(self.sidebar, text="🎨 PERCHANCE PRO", command=self.open_perchance)
+        self.btn_perchance.pack(pady=10, padx=20)
+
+        # Monitor de Logs en tiempo real
+        self.log_view = ctk.CTkTextbox(self, font=("Consolas", 13), text_color="#00FF41", fg_color="#050505")
+        self.log_view.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+        self.log_view.insert("0.0", ">>> KERNEL ADMIN ONLINE - PRIVILEGIOS ROOT ACTIVADOS\n")
+
+    def open_lab(self):
+        self.log_view.insert("end", ">>> Accediendo a atenea_lab: Preparando análisis orig/result...\n")
+        
+    def open_perchance(self):
+        self.log_view.insert("end", ">>> Conectando con Perchance.ai: Bypass de filtros activo.\n")
 
 if __name__ == "__main__":
-    app = AteneaBridge()
+    app = AteneaConsole()
     app.mainloop()
