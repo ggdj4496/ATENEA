@@ -19,6 +19,16 @@ def inicializar_database():
             conocimiento_adquirido TEXT
         )
     ''')
+
+    # Tabla: Mapeo de Estructuras de Bots
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS bot_structures_mapped (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            bot_origen TEXT,
+            texto_boton TEXT,
+            datos_callback TEXT UNIQUE
+        )
+    ''')
     
     # Tabla: Registro de Funciones (Lo extraído de bots)
     cursor.execute('''
