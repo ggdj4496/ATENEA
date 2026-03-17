@@ -12,6 +12,7 @@ import customtkinter as ctk
 from atenea_core.database_manager import inicializar_database, registrar_evento
 from atenea_core.kernel_monitor import iniciar_monitoreo
 from atenea_core.atenea_core_logic import registrar_arranque, consultar_atenea, generar_imagen_perchance
+from atenea_telegram import client as atenea_bot_client
 
 # --- Importación de Asimiladores ---
 try:
