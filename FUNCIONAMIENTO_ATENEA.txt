@@ -1,0 +1,189 @@
+🤖 ATENEA - SISTEMA DE INTELIGENCIA AVANZADA
+==============================================
+
+📋 MANUAL DE FUNCIONAMIENTO, EJECUCIÓN Y CONTROL
+================================================
+
+1. ARRANQUE DEL SISTEMA
+------------------------
+
+Para iniciar ATENEA, ejecuta desde la consola:
+
+```bash
+python C:\ATENEA\atenea_launcher.py
+```
+
+El sistema automáticamente:
+✅ Despierta al núcleo de ATENEA
+✅ Levanta el puente de comunicaciones
+✅ Inicia el monitor de archivos (watchdog)
+✅ Activa el bot de Telegram
+✅ Lanza la interfaz gráfica
+✅ Comienza monitoreo del sistema
+
+2. MÓDULOS DEL SISTEMA
+-----------------------
+
+### 🧠 Núcleo Principal (atenea_core)
+- **database_manager.py**: Gestiona la base de datos SQLite
+- **atenea_core_logic.py**: Lógica central y API de Gemini
+- **kernel_monitor.py**: Monitoreo de archivos del sistema
+
+### 🤖 Comunicaciones (atenea_telegram)
+- **bot.py**: Bot de Telegram con comandos avanzados
+- Comandos disponibles:
+  - `/start` - Activa ATENEA
+  - `/estado` - Muestra estado del sistema
+  - `/procesar_orden` - Ejecuta ORD-5370-335970
+
+### 🌉 Puente de Control (atenea_bridge)
+- **ui.py**: Interfaz gráfica con CustomTkinter
+- **console.py**: Consola de control
+
+### 🔬 Laboratorio (atenea_lab)
+- **atenea_lab_pro_analyzer.py**: Procesamiento de órdenes de aprendizaje
+- Capacidad de generar 3 frames de transición
+- Registro en asimilando.txt
+
+3. FLUJO DE ARRANQUE
+--------------------
+
+```
+atenea_launcher.py
+├── Carga configuración (.env)
+├── Inicializa base de datos
+├── Inicia hilos paralelos:
+│   ├── Hilo 1: Monitor de archivos
+│   ├── Hilo 2: Bot de Telegram  
+│   └── Hilo 3: Interfaz gráfica
+└── Monitoreo del sistema
+```
+
+4. COMANDOS DE CONTROL
+-----------------------
+
+### Desde Telegram:
+```
+/start - Activa el sistema
+/estado - Verifica estado actual
+/procesar_orden - Ejecuta aprendizaje
+```
+
+### Desde Interfaz Gráfica:
+- Botón "Procesar Orden ORD-5370-335970"
+- Botón "Consultar a ATENEA"
+- Monitoreo en tiempo real de CPU/RAM/Disco
+
+5. ESTRUCTURA DE ARCHIVOS
+--------------------------
+```
+C:\ATENEA\
+├── atenea_launcher.py          # Punto de entrada
+├── atenea_core\
+│   ├── database_manager.py       # Base de datos
+│   ├── atenea_core_logic.py    # Lógica central
+│   └── kernel_monitor.py       # Monitoreo
+├── atenea_telegram\
+│   └── bot.py                    # Bot Telegram
+├── atenea_bridge\
+│   ├── ui.py                     # Interfaz gráfica
+│   └── console.py                # Consola
+├── atenea_lab\
+│   └── atenea_lab_pro_analyzer.py # Aprendizaje
+├── logs\
+│   ├── atenea.log               # Registro principal
+│   └── metricas.json            # Métricas del sistema
+└── database\
+    └── atenea.db                # Base de datos SQLite
+```
+
+6. CONFIGURACIÓN REQUERIDA
+----------------------------
+
+Archivo `.env` con:
+```
+GEMINI_API_KEY=tu_clave_aqui
+TELEGRAM_API_ID=tu_id
+TELEGRAM_API_HASH=tu_hash
+TELEGRAM_BOT_TOKEN=tu_token
+```
+
+7. DEPENDENCIAS INSTALADAS
+---------------------------
+```
+pip install requests python-dotenv telethon customtkinter psutil pillow watchdog gputil
+```
+
+8. PRUEBAS DEL SISTEMA
+-----------------------
+
+Ejecutar pruebas automáticas:
+```bash
+python atenea_self_test.py
+python test_atenea.py
+```
+
+9. MONITOREO EN TIEMPO REAL
+----------------------------
+
+El sistema monitorea:
+- 📊 Uso de CPU (%)
+- 💾 Uso de RAM (%)
+- 💽 Uso de disco (%)
+- 🌡️ Temperatura de GPU
+- 📋 Eventos del sistema
+
+10. PROCESO DE APRENDIZAJE
+---------------------------
+
+ORD-5370-335970:
+1. Recibe imagen original
+2. Recibe imagen resultado
+3. Genera 3 frames de transición
+4. Documenta proceso en asimilando.txt
+5. Registra evento en base de datos
+
+11. SEGURIDAD Y LOGS
+---------------------
+
+- Todos los eventos se registran en `logs/atenea.log`
+- Las métricas se guardan en `logs/metricas.json`
+- Las credenciales están en `.env` (no en código)
+
+12. MENSAJES DE CONFIRMACIÓN
+------------------------------
+
+Al iniciar correctamente, el sistema mostrará:
+```
+ATENEA :: Kernel iniciado... [ONLINE]
+ATENEA :: Hilo Monitor... [ONLINE]
+ATENEA :: Hilo Telegram... [ONLINE]
+ATENEA :: Hilo UI... [ONLINE]
+```
+
+13. SOLUCIÓN DE PROBLEMAS
+-------------------------
+
+Si hay errores:
+1. Verificar que todas las dependencias estén instaladas
+2. Comprobar que el archivo `.env` exista
+3. Revisar los logs en `logs/atenea.log`
+4. Ejecutar las pruebas automáticas
+
+14. ESTADO ACTUAL
+-----------------
+
+✅ SISTEMA OPERATIVO Y COMPLETO
+✅ Todos los módulos funcionando
+✅ Base de datos inicializada
+✅ Bot de Telegram activo
+✅ Interfaz gráfica operativa
+✅ Monitoreo del sistema activo
+✅ Procesamiento de órdenes funcionando
+
+🚀 ATENEA ESTÁ LISTA PARA "PLAY"
+================================
+
+Para iniciar: python C:\ATENEA\atenea_launcher.py
+
+El sistema enviará confirmación de funcionamiento real una vez iniciado.

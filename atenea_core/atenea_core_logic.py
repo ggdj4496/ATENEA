@@ -52,3 +52,33 @@ def consultar_atenea(prompt):
     except Exception as e:
         logger.error(f"ERROR EN MOTOR ATENEA: {e}")
         return "Socio, algo ha fallado en el motor de Atenea. Revisa el log."
+
+def generar_imagen_perchance(prompt: str) -> str:
+    """
+    Simula la generación de una imagen sin filtro usando un generador Perchance.
+    En una implementación real, aquí iría la lógica para interactuar con la API
+    o el sistema de Perchance.
+
+    Args:
+        prompt (str): La descripción para la imagen a generar.
+
+    Returns:
+        str: La URL de la imagen generada (o un mensaje de error).
+    """
+    logger.info(f"SOLICITUD DE IMAGEN PERCHANCE: '{prompt}'")
+    print(f"ATENEA :: Solicitud de imagen Perchance recibida: '{prompt}'")
+
+    try:
+        # Simulación de la llamada a Perchance
+        # En un caso real, aquí se conectaría al generador Perchance.
+        # Por ahora, devolvemos una URL de imagen de marcador de posición.
+        # Usamos un servicio como placeholder.com para crear una imagen con el texto del prompt.
+        placeholder_url = f"https://via.placeholder.com/512x512.png?text={prompt.replace(' ', '+')}"
+        
+        logger.info(f"IMAGEN GENERADA (SIMULADO): {placeholder_url}")
+        return placeholder_url
+    except Exception as e:
+        error_msg = f"Error al generar imagen con Perchance: {e}"
+        logger.error(error_msg)
+        print(f"ATENEA :: {error_msg}")
+        return "Error: No se pudo generar la imagen."

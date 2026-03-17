@@ -42,13 +42,11 @@ def procesar_orden_aprendizaje():
             print(f"Creado archivo de prueba: {IMG_RESULTADO}")
         # --- Fin de la simulación ---
 
-        # 2. Cargar imágenes (simulado)
-        print(f"Cargando imagen original: {IMG_ORIGINAL}")
-        print(f"Cargando imagen resultado: {IMG_RESULTADO}")
-        # img_orig = Image.open(IMG_ORIGINAL)
-        # img_res = Image.open(IMG_RESULTADO)
+        # 2. Realizar análisis de diferencias
+        print("Iniciando análisis forense de diferencias entre imágenes...")
+        analizar_diferencias_imagen(IMG_ORIGINAL, IMG_RESULTADO, OUTPUT_DIR)
 
-        # 3. Generar frames de transición (simulación)
+        # 3. Generar frames de transición (simulación mantenida por ahora)
         print("Generando frames de transición del proceso de razonamiento...")
         for i in range(1, 4):
             frame_path = os.path.join(OUTPUT_DIR, f"transicion_{i}.png")
