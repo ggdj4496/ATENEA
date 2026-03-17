@@ -32,7 +32,7 @@ modules = {
 class TestAteneaSelfTest(unittest.TestCase):
 
     @patch.dict("sys.modules", modules)
-    def test_sistem-inicia_hilos_correctamente(self):
+    def test_sistema_inicia_hilos_correctamente(self):
         """
         Verifica que el main() de atenea_launcher.py inicia correctamente
         los tres hilos principales (Kernel, Telegram, UI) y que estos
