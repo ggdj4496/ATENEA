@@ -1,6 +1,7 @@
 
 import os
-from PIL import Image
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
+import numpy as np
 from atenea_core.database_manager import registrar_evento
 
 # --- Constantes de la Orden ---
