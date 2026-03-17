@@ -5,6 +5,7 @@ import datetime
 DB_PATH = r"C:\ATENEA\atenea_core\database\atenea_mind.db"
 
 def inicializar_database():
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     

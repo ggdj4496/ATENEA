@@ -2,10 +2,13 @@ import logging
 from logging.handlers import RotatingFileHandler
 import datetime
 import requests
-import caja_fuerte as cf
+import os
 
 # CONFIGURACIÓN DEL LOG ROTATIVO (50MB)
-LOG_FILENAME = "atenea_bridge.log"
+LOG_DIR = "C:\\ATENEA\\logs"
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+LOG_FILENAME = os.path.join(LOG_DIR, "atenea_bridge.log")
 MAX_BYTES = 50 * 1024 * 1024 
 BACKUP_COUNT = 100
 

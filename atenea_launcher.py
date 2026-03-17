@@ -1,47 +1,40 @@
 import os
-import datetime
-import numpy as np
-from PIL import Image
-from atenea_core.database_manager import registrar_evento
+from dotenv import load_dotenv
+from atenea_core.database_manager import inicializar_database
+from atenea_core.kernel_monitor import iniciar_monitoreo
+from atenea_core.atenea_core_logic import registrar_arranque
+from atenea_bridge.console import iniciar_consola
 
-PATH_LAB = r"C:\ATENEA\atenea_lab\image_analisis"
+def main():
+    """Punto de entrada principal para la aplicación Atenea."""
+    observer = None  # Inicializar observer a None
+    try:
+        # Cargar variables de entorno
+        load_dotenv()
 
-def generar_pasos_intermedios(img_o, img_r, nombre_base):
-    """Genera 3 estados intermedios del proceso de asimilación."""
-    arr_o = np.array(img_o).astype(float)
-    arr_r = np.array(img_r.resize(img_o.size)).astype(float)
+        # Inicializar la base de datos
+        inicializar_database()
 
-    for i, paso in enumerate([0.25, 0.50, 0.75], 1):
-        inter_arr = (1 - paso) * arr_o + paso * arr_r
-        inter_img = Image.fromarray(inter_arr.astype(np.uint8))
-        inter_img.save(os.path.join(PATH_LAB, f"{nombre_base}_paso_{i}.png"))
+        # Registrar el arranque en el log
+        registrar_arranque()
 
-def iniciar_analisis_forense(ruta_original, ruta_resultado):
-    if not os.path.exists(PATH_LAB): os.makedirs(PATH_LAB)
+        # Iniciar el monitor de archivos del kernel
+        observer = iniciar_monitoreo()
+        print("Atenea está viva. El Kernel está monitorizando el sistema de archivos.")
+        print("Escribe 'exit' para terminar.")
 
-    nombre_base = os.path.splitext(os.path.basename(ruta_original))[0]
-    
-    # 1. Procesar y Renombrar
-    with Image.open(ruta_original) as img_o, Image.open(ruta_resultado) as img_r:
-        img_o.save(os.path.join(PATH_LAB, f"{nombre_base}_orig.png"))
-        img_r.save(os.path.join(PATH_LAB, f"{nombre_base}_result.png"))
-        
-        # Generar las 3 claves visuales
-        generar_pasos_intermedios(img_o, img_r, nombre_base)
+        # Iniciar la consola interactiva
+        iniciar_consola(observer)
 
-        # 2. Análisis de Píxeles y Ruido
-        diff = np.abs(np.array(img_o).astype(float) - np.array(img_r.resize(img_o.size)).astype(float))
-        ruido_medio = np.mean(diff)
-        
-        # 3. Escritura del LOG de Asimilación
-        log_path = os.path.join(PATH_LAB, "asimilando.txt")
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(f"ASIMILACIÓN: {nombre_base} | FECHA: {datetime.datetime.now()}\n")
-            f.write(f"DATOS ORIG: {img_o.size} {img_o.mode}\n")
-            f.write("-" * 20 + "\n")
-            f.write(f"ANÁLISIS DE PROCESO: Ruido detectado {ruido_medio:.2f}\n")
-            f.write(f"VECTOR DE CAMBIO: {'IA Difusión detectada' if ruido_medio > 40 else 'Filtro Algorítmico'}\n")
-            f.write("+" * 20 + "\n\n")
+    except Exception as e:
+        print(f"ERROR CRÍTICO EN EL ARRANQUE DE ATENEA: {e}")
+        # Aquí podrías añadir un log de errores más detallado si fuera necesario
+    finally:
+        # Asegurarse de que el observer se detiene correctamente al salir
+        if observer and observer.is_alive():
+            observer.stop()
+            observer.join()
+        print("Atenea se ha desconectado. Fin de la sesión.")
 
-    registrar_evento("LAB", nombre_base, "Imagen asimilada y despiezada en 3 pasos.")
-    return f"Socio, {nombre_base} ha sido asimilada. Mira la carpeta image_analisis."
+if __name__ == "__main__":
+    main()
