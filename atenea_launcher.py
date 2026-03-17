@@ -1,58 +1,47 @@
 import os
-import sys
-import threading
-import time
-import subprocess
-import ctypes
-from atenea_core.database_manager import inicializar_database, registrar_evento
+import datetime
+import numpy as np
+from PIL import Image
+from atenea_core.database_manager import registrar_evento
 
-# REGLA: Privilegios de Administrador para control de Kernel
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
+PATH_LAB = r"C:\ATENEA\atenea_lab\image_analisis"
 
-def lanzar_componente(comando):
-    """Lanza un proceso y lo mantiene vivo."""
-    subprocess.Popen([sys.executable] + comando)
+def generar_pasos_intermedios(img_o, img_r, nombre_base):
+    """Genera 3 estados intermedios del proceso de asimilación."""
+    arr_o = np.array(img_o).astype(float)
+    arr_r = np.array(img_r.resize(img_o.size)).astype(float)
 
-def iniciar_sistema_total():
-    if not is_admin():
-        print(">>> [!] Elevando privilegios... Acepta el aviso de Windows.")
-        ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
-        return
+    for i, paso in enumerate([0.25, 0.50, 0.75], 1):
+        inter_arr = (1 - paso) * arr_o + paso * arr_r
+        inter_img = Image.fromarray(inter_arr.astype(np.uint8))
+        inter_img.save(os.path.join(PATH_LAB, f"{nombre_base}_paso_{i}.png"))
 
-    print(f"{'='*40}")
-    print("   ATENEA AGENT - INICIANDO SECUENCIA ROOT")
-    print(f"{'='*40}")
+def iniciar_analisis_forense(ruta_original, ruta_resultado):
+    if not os.path.exists(PATH_LAB): os.makedirs(PATH_LAB)
 
-    # 1. Inicializar Cerebro (DB)
-    inicializar_database()
-    registrar_evento("SISTEMA", "Kernel", "Arranque maestro iniciado desde Launcher")
-
-    # 2. Lanzar Monitor de Integridad (En segundo plano)
-    # Importante: El monitor vigila cambios en C:\ATENEA
-    from atenea_core.kernel_monitor import iniciar_monitoreo
-    monitor_thread = threading.Thread(target=iniciar_monitoreo, daemon=True)
-    monitor_thread.start()
-    print(">>> [OK] Kernel Monitor activo (Vigilando VS Code)")
-
-    # 3. Lanzar Bridge (Interfaz Visual) y Telegram
-    print(">>> [OK] Desplegando Consola Visual...")
-    lanzar_componente([r"C:\ATENEA\atenea_bridge\console.py"])
+    nombre_base = os.path.splitext(os.path.basename(ruta_original))[0]
     
-    print(">>> [OK] Sincronizando atenea_telegram...")
-    lanzar_componente([r"C:\ATENEA\atenea_telegram\atenea_telegram.py"])
+    # 1. Procesar y Renombrar
+    with Image.open(ruta_original) as img_o, Image.open(ruta_resultado) as img_r:
+        img_o.save(os.path.join(PATH_LAB, f"{nombre_base}_orig.png"))
+        img_r.save(os.path.join(PATH_LAB, f"{nombre_base}_result.png"))
+        
+        # Generar las 3 claves visuales
+        generar_pasos_intermedios(img_o, img_r, nombre_base)
 
-    print(f"\n>>> [{time.strftime('%H:%M:%S')}] TODO ONLINE. ATENEA está viva.")
-    
-    # Mantener el proceso padre vivo
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("\n>>> Apagando sistema de forma segura...")
+        # 2. Análisis de Píxeles y Ruido
+        diff = np.abs(np.array(img_o).astype(float) - np.array(img_r.resize(img_o.size)).astype(float))
+        ruido_medio = np.mean(diff)
+        
+        # 3. Escritura del LOG de Asimilación
+        log_path = os.path.join(PATH_LAB, "asimilando.txt")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"ASIMILACIÓN: {nombre_base} | FECHA: {datetime.datetime.now()}\n")
+            f.write(f"DATOS ORIG: {img_o.size} {img_o.mode}\n")
+            f.write("-" * 20 + "\n")
+            f.write(f"ANÁLISIS DE PROCESO: Ruido detectado {ruido_medio:.2f}\n")
+            f.write(f"VECTOR DE CAMBIO: {'IA Difusión detectada' if ruido_medio > 40 else 'Filtro Algorítmico'}\n")
+            f.write("+" * 20 + "\n\n")
 
-if __name__ == "__main__":
-    iniciar_sistema_total()
+    registrar_evento("LAB", nombre_base, "Imagen asimilada y despiezada en 3 pasos.")
+    return f"Socio, {nombre_base} ha sido asimilada. Mira la carpeta image_analisis."
