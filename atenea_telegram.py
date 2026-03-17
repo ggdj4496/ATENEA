@@ -53,10 +53,17 @@ async def ejecutar_analisis_local(event):
         await event.edit("**[ATENEA]** 📥 Imagen recibida. Analizando estructura...")
         ruta_descarga = await client.download_media(mensaje_original.photo, file="asimilador_input/")
         
-        # Aquí iría la llamada al script local
-        # Por ahora, simularemos el procesamiento y enviaremos la misma imagen
-        await event.edit("**[ATENEA]** ⚙️ Procesamiento local activado (Uso de CPU/GPU propio)...", buttons=None)
+        # Llamada REAL al Asimilador 1
+        await event.edit("**[ATENEA]** ⚙️ Procesamiento local activado (Asimilador 1: Análisis Forense)...", buttons=None)
         
-        # Simulación del resultado del análisis
-        await client.send_file(event.chat_id, ruta_descarga, caption="**[ATENEA]** ✅ Análisis completado.")
+        # Definimos las rutas de salida
+        output_dir = "C:\\ATENEA\\atenea_lab\\lab_io\\telegram_output"
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Ejecutamos el análisis (usando la misma imagen como original y resultado para la prueba)
+        analizar_diferencias_imagen(ruta_descarga, ruta_descarga, output_dir)
+
+        # Por ahora, simplemente reenviamos la imagen original como resultado.
+        # En un futuro, aquí se enviaría la imagen procesada o un informe.
+        await client.send_file(event.chat_id, ruta_descarga, caption="**[ATENEA]** ✅ Análisis Forense completado.")
         os.remove(ruta_descarga)
