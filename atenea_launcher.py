@@ -314,10 +314,12 @@ def main():
         
         # 6. Iniciar bot de Telegram
         print("🤖 Iniciando bot de Telegram...")
-        # El bot de Telegram se ejecutará en el hilo principal
+        hilo_telegram = threading.Thread(target=atenea_bot_client.run_until_disconnected, name="TelegramBot", daemon=True)
+        hilo_telegram.start()
         
         print("✅ ATENEA :: Kernel iniciado... [ONLINE]")
         print("✅ ATENEA :: Hilo Monitor... [ONLINE]")
+        print("✅ ATENEA :: Hilo Telegram... [ONLINE]")
         
         # 7. Iniciar interfaz gráfica (esto bloqueará el hilo principal)
         print("🖥️ Iniciando interfaz gráfica...")
