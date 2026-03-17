@@ -173,13 +173,21 @@ def iniciar_interfaz_grafica():
                 self.control_frame.pack(fill="x", padx=20, pady=10)
                 
                 # Botones de control
-                self.procesar_btn = ctk.CTkButton(
+                self.procesar_btn_1 = ctk.CTkButton(
                     self.control_frame, 
-                    text="🔄 Procesar Orden ORD-5370-335970",
-                    command=self.procesar_orden,
+                    text="🔬 Procesar con Asimilador 1",
+                    command=self.procesar_orden_1,
                     font=ctk.CTkFont(size=14)
                 )
-                self.procesar_btn.pack(pady=10)
+                self.procesar_btn_1.pack(side="left", padx=10, pady=10)
+
+                self.procesar_btn_2 = ctk.CTkButton(
+                    self.control_frame, 
+                    text="🧠 Procesar con Asimilador 2",
+                    command=self.procesar_orden_2,
+                    font=ctk.CTkFont(size=14)
+                )
+                self.procesar_btn_2.pack(side="left", padx=10, pady=10)
                 
                 self.consultar_btn = ctk.CTkButton(
                     self.control_frame,
