@@ -24,11 +24,17 @@ def registrar_arranque():
     ahora = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     logger.info("="*60)
     logger.info(f"ARRANQUE SISTEMA ATENEA - SESIÓN: {ahora}")
-    logger.info(f"PROYECTO: {cf.PROJECT_NAME} | AGENTE: {cf.AGENT_NAME}")
+    logger.info(f"PROYECTO: {os.getenv('PROJECT_NAME')} | AGENTE: {os.getenv('AGENT_NAME')}")
     logger.info("="*60)
 
 def consultar_atenea(prompt):
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{cf.MODEL_NAME}:generateContent?key={cf.GEMINI_KEY}"
+    api_key = os.getenv("GEMINI_KEY")
+    model_name = os.getenv("MODEL_NAME")
+    if not api_key or not model_name:
+        logger.error("GEMINI_KEY o MODEL_NAME no están configuradas en el entorno.")
+        return "Error: La configuración de la API de Gemini no está completa."
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
     headers = {'Content-Type': 'application/json'}
     data = {"contents": [{"parts": [{"text": prompt}]}]}
     
