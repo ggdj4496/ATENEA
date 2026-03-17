@@ -5,6 +5,9 @@ import os
 from telethon import TelegramClient, events
 from dotenv import load_dotenv
 from atenea_core_logic import registrar_estructura_bot
+from asimilador_1.analyzer import analizar_diferencias_imagen
+from asimilador_2.cognitive_emulator import emulate_and_extract
+import subprocess
 
 load_dotenv()
 

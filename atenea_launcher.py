@@ -290,7 +290,17 @@ def main():
     print("=" * 60)
     
     try:
-        # 1. Cargar configuración desde .env
+        # 1. Comprobar privilegios de administrador
+        try:
+            is_admin = (os.getuid() == 0) if os.name != 'nt' else (ctypes.windll.shell32.IsUserAnAdmin() != 0)
+        except AttributeError:
+            is_admin = False # Fallback para entornos no estándar
+        if not is_admin:
+            print("⚠️  ATENCIÓN: ATENEA no se está ejecutando con privilegios de Administrador. Algunas funciones a nivel de kernel pueden estar limitadas.")
+        else:
+            print("👑 ATENEA operando con privilegios de Administrador.")
+        
+        # 2. Cargar configuración desde .env
         print("📋 Cargando configuración...")
         load_dotenv()
         with open("c:\\ATENEA\\atenea_core\\config.json", 'r') as f:
